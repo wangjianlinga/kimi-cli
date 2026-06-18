@@ -23,6 +23,7 @@ export default withMermaid(defineConfig({
       description: 'Kimi Code CLI 用户文档',
       themeConfig: {
         nav: [
+          { text: '代码分析', link: '/zh/code-analyse/', activeMatch: '/zh/code-analyse/' },
           { text: '指南', link: '/zh/guides/getting-started', activeMatch: '/zh/guides/' },
           { text: '定制化', link: '/zh/customization/mcp', activeMatch: '/zh/customization/' },
           { text: '配置', link: '/zh/configuration/config-files', activeMatch: '/zh/configuration/' },
@@ -31,6 +32,14 @@ export default withMermaid(defineConfig({
           { text: '发布说明', link: '/zh/release-notes/changelog', activeMatch: '/zh/release-notes/' },
         ],
         sidebar: {
+          '/zh/code-analyse/': [
+            {
+              text: '代码分析',
+              items: [
+                { text: '概述', link: '/zh/code-analyse/' },
+              ],
+            },
+          ],
           '/zh/guides/': [
             {
               text: '指南',
@@ -106,6 +115,7 @@ export default withMermaid(defineConfig({
       description: 'Kimi Code CLI User Documentation',
       themeConfig: {
         nav: [
+          { text: 'Code Analyse', link: '/en/code-analyse/', activeMatch: '/en/code-analyse/' },
           { text: 'Guides', link: '/en/guides/getting-started', activeMatch: '/en/guides/' },
           { text: 'Customization', link: '/en/customization/mcp', activeMatch: '/en/customization/' },
           { text: 'Configuration', link: '/en/configuration/config-files', activeMatch: '/en/configuration/' },
@@ -114,6 +124,14 @@ export default withMermaid(defineConfig({
           { text: 'Release Notes', link: '/en/release-notes/changelog', activeMatch: '/en/release-notes/' },
         ],
         sidebar: {
+          '/en/code-analyse/': [
+            {
+              text: 'Code Analyse',
+              items: [
+                { text: 'Overview', link: '/en/code-analyse/' },
+              ],
+            },
+          ],
           '/en/guides/': [
             {
               text: 'Guides',

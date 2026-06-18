@@ -16,20 +16,20 @@ REM Try bun first
 where bun >nul 2>nul
 if %errorlevel% == 0 (
     set "PKG_MGR=bun"
+    set "RUNNER=bunx"
     set "INSTALL_CMD=bun install"
-    set "DEV_CMD=bun run dev"
     echo Found package manager: bun
-    goto :check_deps
+    goto :check_port
 )
 
 REM Try npm directly
 where npm >nul 2>nul
 if %errorlevel% == 0 (
     set "PKG_MGR=npm"
+    set "RUNNER=npx"
     set "INSTALL_CMD=npm install"
-    set "DEV_CMD=npm run dev"
     echo Found package manager: npm
-    goto :check_deps
+    goto :check_port
 )
 
 REM npm not in PATH, but maybe node is and npm is next to node.exe
@@ -39,10 +39,10 @@ if %errorlevel% == 0 (
         set "NODE_DIR=%%~dpi"
         if exist "!NODE_DIR!npm.cmd" (
             set "PKG_MGR=npm"
+            set "RUNNER=!NODE_DIR!npx.cmd"
             set "INSTALL_CMD=!NODE_DIR!npm.cmd install"
-            set "DEV_CMD=!NODE_DIR!npm.cmd run dev"
             echo Found package manager: npm (next to node.exe)
-            goto :check_deps
+            goto :check_port
         )
     )
 )
@@ -55,7 +55,19 @@ echo.
 pause
 exit /b 1
 
-:check_deps
+:check_port
+echo.
+
+REM Check if default VitePress port 5174 is already bound
+netstat -ano | findstr /R /C:":5174[ ]" >nul 2>nul
+if %errorlevel% == 0 (
+    set "PORT_FLAG=--port 0"
+    echo Port 5174 is already in use. Will use a random port.
+) else (
+    set "PORT_FLAG=--port 5174"
+    echo Port 5174 is available.
+)
+
 echo.
 
 REM Install dependencies if node_modules is missing
@@ -74,9 +86,16 @@ if not exist "node_modules" (
     echo.
 )
 
-REM Start VitePress dev server
+REM Sync changelog data, then start VitePress dev server
 echo Starting VitePress dev server...
-call %DEV_CMD%
+call %PKG_MGR% run sync
+if %errorlevel% neq 0 (
+    echo ERROR: Failed to sync changelog data.
+    pause
+    exit /b 1
+)
+
+call %RUNNER% vitepress dev %PORT_FLAG%
 
 if %errorlevel% neq 0 (
     echo.
